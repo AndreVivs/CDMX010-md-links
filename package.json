@@ -1,4 +1,30 @@
 {
-  "name": "md-links",
-  "version": "0.1.0"
+  "name": "cdmx010-md-links",
+  "version": "1.0.0",
+  "descripcion": "proyecto MD.Links",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "jest --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreVivs/CDMX010-md-links.git"
+  },
+  "keywords": [
+    "markdown",
+    "links"
+  ],
+  "author": "Andrea Ramos Vivas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreVivs/CDMX010-md-links/issues"
+  },
+  "homepage": "https://github.com/AndreVivs/CDMX010-md-links#readme",
+  "dependencies": {
+    "jest": "^26.6.3",
+    "yargs": "^16.2.0"
+  }
 }
