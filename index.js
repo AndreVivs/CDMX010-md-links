@@ -14,13 +14,12 @@ let searchingMdFiles = (path) => {
             } else {
                 data.forEach( docOrDir => {
                     if (fs.statSync(docOrDir).isDirectory()) {
-                        searchingMdFiles(newPath);
+                        searchingMdFiles(route);
                     } else {
-                        docOrDir == doc
-                        if (pathRq.resolve(docOrDir) !== '.md'){
-                            mdFiles.push.apply(mdFiles, [])
+                        if (pathRq.resolve(docOrDir) === '.md'){
+                          return mdFiles.push.apply(mdFiles, [docOrDir]);
                         }
-                        return mdFiles.push.apply(mdFiles, [docOrDir]);
+                        
                     }
                 })
             }
