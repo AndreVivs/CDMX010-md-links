@@ -2,10 +2,12 @@
 const fs = require('fs');
 const pathRq = require('path');
 const argv = require('yargs').argv;
-let route = argv.route;
-
+let route = 'ArchivosMd'; // argv.route
+const fetch = require('node-fetch');
+// variables for get final path
 let getDirection = pathRq.parse(__filename);
 let userDirection = getDirection.dir;
+
 /*
 // Searching .md files
 let searchingMdFiles = (path) => {
@@ -35,24 +37,32 @@ console.log(searchingMdFiles(route));
 --------------------------------------------------------------------------------------*/
 
 // Obtaining finall path
-let gettingFinalPath = (userDirection, route, file) =>{
+const getLinks = (userDirection, route, file) =>{
         let newPath = pathRq.join(userDirection, route, file);
-        let newPathArray = [];
-        newPathArray.push(newPath);
-        console.log(newPathArray);
+        const links = fs.readFileSync(newPath,'utf-8').match(/https?:\/\/[a-zA-Z\.\/-]+/gm);
+        return links
+}
+
+//Getting status links
+let statusLinks = () => {
+    // Solo validar cuando el usuario lo pide, sino retornar solamente los links
+            // links.forEach(link => {
+            //     console.log('link ', link);
+            //     fetch(link)
+            //     .then(respuesta => respuesta.json())
+            //     .then(json = {
+            //     console.log(json.validate);
+            //     })
+            // })
 }
 
 // Read directory
 let readDirectory = (path)=> {
     if(fs.statSync(path).isDirectory()) {
-        fs.readdir(route, 'utf-8', (err, files) => {
-            if(err){
-                console.log('Error: ', err);
-            } else {
-                files.forEach( file => {
-                    gettingFinalPath(userDirection, route, file);
-                })
-            } 
+        const files = fs.readdirSync(route, 'utf-8')
+        files.forEach( file => {
+            const links = getLinks(userDirection, route, file);
+            console.log(links);
         })
     }
 };
