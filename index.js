@@ -40,29 +40,40 @@ console.log(searchingMdFiles(route));
 const getLinks = (userDirection, route, file) =>{
         let newPath = pathRq.join(userDirection, route, file);
         const links = fs.readFileSync(newPath,'utf-8').match(/https?:\/\/[a-zA-Z\.\/-]+/gm);
+        linksValidated(links, newPath)
+        // readDirectory(newPath)
         return links
 }
 
-//Getting status links
-let statusLinks = () => {
-    // Solo validar cuando el usuario lo pide, sino retornar solamente los links
-            // links.forEach(link => {
-            //     console.log('link ', link);
-            //     fetch(link)
-            //     .then(respuesta => respuesta.json())
-            //     .then(json = {
-            //     console.log(json.validate);
-            //     })
-            // })
+//Validating links
+let linksValidated = (links, newPath) => {
+    // Solo ejecutar si el usuario ingreso la opcion --validate sino retornar solo 
+    // return new Promise ( (resolve, reject) => {
+        links.forEach( links => {
+            fetch(links)
+                .then(result => {
+                    if(result.status === 200){
+                        console.log('href: ', links, '\ntext: ', result.status, '\nfile: ', newPath);
+                    } else {
+                        console.log('href: ', links, '\ntext: ', result.status, '\nfile: ', newPath);
+                    }
+            })
+            .catch( (error) => (console.error(error)));
+        })
+    //})
 }
 
+// Estadistics Links
+
+
 // Read directory
-let readDirectory = (path)=> {
+let readDirectory = (path, /* newPath */)=> {
+    // No esta reconociendo el argumento newPath
     if(fs.statSync(path).isDirectory()) {
         const files = fs.readdirSync(route, 'utf-8')
         files.forEach( file => {
             const links = getLinks(userDirection, route, file);
-            console.log(links);
+            console.log(/* newPath, */ links);
         })
     }
 };
