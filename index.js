@@ -40,42 +40,45 @@ console.log(searchingMdFiles(route));
 const getLinks = (userDirection, route, file) =>{
         let newPath = pathRq.join(userDirection, route, file);
         const links = fs.readFileSync(newPath,'utf-8').match(/https?:\/\/[a-zA-Z\.\/-]+/gm);
-        linksValidated(links, newPath)
-        // readDirectory(newPath)
         return links
 }
 
 //Validating links
-let linksValidated = (links, newPath) => {
+let ValidatingLinks = (links, file) => {
+    console.log(file);
+    let hrefTxtFile;
     // Solo ejecutar si el usuario ingreso la opcion --validate sino retornar solo 
-    // return new Promise ( (resolve, reject) => {
         links.forEach( links => {
             fetch(links)
                 .then(result => {
-                    if(result.status === 200){
-                        console.log('href: ', links, '\ntext: ', result.status, '\nfile: ', newPath);
-                    } else {
-                        console.log('href: ', links, '\ntext: ', result.status, '\nfile: ', newPath);
-                    }
+                    hrefTxtFile = {
+                        href: result.url,
+                        text: result.statusText,
+                        status: result.status,
+                        file: file,
+                    };
+                    console.log(hrefTxtFile);
             })
             .catch( (error) => (console.error(error)));
         })
-    //})
-}
-
-// Estadistics Links
-
+        return hrefTxtFile
+};
+// const linksValidated = ValidatingLinks(links,file);
+// console.log(linksValidated); 
 
 // Read directory
-let readDirectory = (path, /* newPath */)=> {
-    // No esta reconociendo el argumento newPath
+let readDirectory = (path)=> {
+    let links = [];
     if(fs.statSync(path).isDirectory()) {
         const files = fs.readdirSync(route, 'utf-8')
         files.forEach( file => {
-            const links = getLinks(userDirection, route, file);
-            console.log(/* newPath, */ links);
+            const obtainingLinks = getLinks(userDirection, route, file);
+            links = links.concat(obtainingLinks);
         })
     }
+    return links
 };
 
-readDirectory(route);
+const finalLinksArray = readDirectory(route);
+console.log(finalLinksArray);
+ValidatingLinks(finalLinksArray);
