@@ -29,23 +29,16 @@ let userDirection = getDirection.dir;
 
 // Searching .md files
 let searchingMdFiles = (route) => {
-    console.log('route', route);
     let mdFiles = [];
     if(fs.statSync(route).isDirectory()) {
         const filesArray = fs.readdirSync(route, 'utf-8')
         filesArray.forEach( docOrDir => {
             let newRoute = pathRq.resolve(route, docOrDir)
-            console.log('forEach docOrDir', docOrDir)
-            console.log('filesArray',filesArray);
             if (fs.statSync(newRoute).isDirectory()) {
-                console.log('el elemento fue directorio');
-                console.log('soy newRoute', newRoute);
                 searchingMdFiles(newRoute);
             }
             if (docOrDir.split('.').pop() === 'md') {
-                console.log('archivo md', docOrDir)
                 mdFiles = mdFiles.concat(docOrDir);
-                console.log('mdFiles', mdFiles);
             }
         })
     }
