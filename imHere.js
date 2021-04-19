@@ -1,3 +1,24 @@
+// Stats Links --stats
+const linkStatus = (links) => {
+  // console.log('linkStatus', links);
+  // console.log(totalLinks);
+  // if(links.lenght <= 0){
+  //     // Usar un .lenght para sacar el numero
+  //     // de elementos dentro de un arreglo
+  //     let totalLinks = links.lenght;
+  //     console.log('Total: ', totalLinks)
+  // }
+  // if(links !== links){
+  //     // usar filter.lenght para sacar los links que esten repetidos
+  //     // y posteriormente obtener la longitud del arreglo para imprimirlo
+  //     let uniqueLinks = ++
+  // }
+  // if(result.status <= 400){
+  //     // Crear un nuevo arreglo para imprimir la longitud de los links que son <= a 400
+  //     let brokenLinks;
+  // }
+}
+
 // module.exports = () => {
   // ...
 // };
