@@ -1,81 +1,97 @@
 // implementing modules
 const fs = require('fs');
 const pathRq = require('path');
-const argv = require('yargs').argv;
-let route = argv.route; //'ArchivosMd';
+let argv = require('yargs').argv;
+let route = argv.route;
 const fetch = require('node-fetch');
 // variables for get final path
 let getDirection = pathRq.parse(__filename);
 let userDirection = getDirection.dir;
 
-// //Construyendo el controlador
-// const mdlinks = (option) =>{
-//     switch(option){
-//         case '--validate' || '-v':
-//             console.log('yo ando validando ggg');
-//             break;
-//         case option === '--stats' || '-s':
-//             console.log('sacando tus estadisticas ando you you you');
-//             break;
-//         case option === '--validate' || '-v' && '--stats' || '-s':
-//             console.log('validando y estateando ');
-//             break;
-//         default:
-//             console.log('entregando links');
-//             break;
-//     }
+//Controlador
+// const mdlinks = () =>{
+//     if(argv.validate === true && argv.stats === true){
+//         console.log('VALIDACION Y ESTADISTICA', argv.validate, argv.stats);
+//     } else if (argv.v === true && argv.s === true){
+//         console.log('VALIDACION Y ESTADISTICAs 2', argv.v, argv.s);
+//     }else if (argv.validate === true || argv.v === true){
+//         console.log('VALIDACION', argv.validate);
+//     } else if (argv.stats === true || argv.s === true){
+//         console.log('ESTADISTICAS');
+//     } else 
+//     console.log('LINKS', searchingMdFiles(route));
 // }
-// mdlinks(option);
+// mdlinks();
 
-// Searching .md files
-let searchingMdFiles = (route) => {
+//Validating links
+let validatingLinks = (links, newRoute) => {
+    console.log(newRoute);
+    let = hrefTxtFile;
+    // Solo ejecutar si el usuario ingreso la opcion --validate sino retornar links
+        links.forEach( links => {
+            fetch(links)
+                .then(result => {
+                    hrefTxtFile = {
+                        href: result.url,
+                        text: result.statusText,
+                        status: result.status,
+                        file: file,
+                    };
+                    console.log(hrefTxtFile);
+            })
+            .catch( (error) => (console.error(error)));
+        })
+        return hrefTxtFile
+};
+
+const getLinks = (newRoute) =>{
+        const links = fs.readFileSync(newRoute,'utf-8').match(/https?:\/\/[a-zA-Z\.\/-]+/gm);
+        console.log(links);
+        validatingLinks(links, newRoute)
+        return links
+}
+
+let pathFiles = (route, filesArray) => {
+    let pathsFiles = [];
+    filesArray.forEach( file => {
+        const newPaths = pathRq.resolve(route, file)
+        pathsFiles.push(newPaths)
+    })
+    return pathsFiles
+}
+
+let getDirectoryFiles = (route) =>{
+    const filesArray = fs.readdirSync(route, 'utf-8')
+            let newRoute = pathFiles(route, filesArray)
+            newRoute.forEach(route => {
+                if (fs.statSync(route).isDirectory()) {
+                    console.log('soy Route', route);
+                    getDirectoryFiles(route);
+                } else if (fs.statSync(route).isFile()){
+                    searchingMdFiles(route);
+                }
+            })
+}
+
+// SearchingLinksfiles
+const searchingMdFiles = (route) => {
     let mdFiles = [];
     if(fs.statSync(route).isDirectory()) {
-        const filesArray = fs.readdirSync(route, 'utf-8')
-        filesArray.forEach( docOrDir => {
-            let newRoute = pathRq.resolve(route, docOrDir)
-            if (fs.statSync(newRoute).isDirectory()) {
-                searchingMdFiles(newRoute);
-            }
-            if (docOrDir.split('.').pop() === 'md') {
-                mdFiles = mdFiles.concat(docOrDir);
-            }
-        })
+        getDirectoryFiles(route);
+    } else if (pathRq.extname(route) === '.md') {
+        getLinks(route)
     }
+
     return mdFiles
 }
-let totalMdFiles = searchingMdFiles(route);
-console.log('yo soy total', totalMdFiles);
 
-// Obtaining finall path
-// const getLinks = (userDirection, route, file) =>{
-//         let newPath = pathRq.join(userDirection, route, file);
-//         const links = fs.readFileSync(newPath,'utf-8').match(/https?:\/\/[a-zA-Z\.\/-]+/gm);
-//         return links
-// }
+searchingMdFiles(route);
+// console.log('totalMdFiles', totalMdFiles);
 
-// //Validating links
-// let validatingLinks = (links, file) => {
-//     console.log(file);
-//     let hrefTxtFile;
-//     // Solo ejecutar si el usuario ingreso la opcion --validate sino retornar solo 
-//         links.forEach( links => {
-//             fetch(links)
-//                 .then(result => {
-//                     hrefTxtFile = {
-//                         href: result.url,
-//                         text: result.statusText,
-//                         status: result.status,
-//                         file: file,
-//                     };
-//                     console.log(hrefTxtFile);
-//             })
-//             .catch( (error) => (console.error(error)));
-//         })
-//         return hrefTxtFile
-// };
-// const linksValidated = ValidatingLinks(links,file);
-// console.log(linksValidated);
+
+
+//const linksValidated = validatingLinks(links,newRoute);
+//console.log(linksValidated);
 
 // // Read directory
 // let readDirectory = (path)=> {
